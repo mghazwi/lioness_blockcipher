@@ -9,11 +9,11 @@ use sha3::{
 };
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
-// We expect the input key to be of size 32 bytes (128-bits)
+// We expect the input key to be of size 32 bytes (256-bits)
 // because in sphinx this is the size of the shared key `s` between the sender and each hop.
 // This shared key is then used to derive all the needed keys to encrypt the payload
 pub const MASTER_KEY_LEN: usize = 32;
-// For LIONESS, the length of the left part of the key (after splitting block into left `L` and right `R`)
+// For LIONESS, the length of the left part (after splitting block into left `L` and right `R`)
 // must be the same size as:
 // - the stream cipher key
 // - the output (digest) of the keyed-hash function
@@ -58,7 +58,7 @@ struct RoundKeys {
 /// WARNING: integrity/authenticity is not guaranteed by the LIONESS large-block cipher
 /// This is because LIONESS is not an AEAD but one can add an authentication check by
 /// simply prepending the plaintext with `k` bytes of zeros
-/// a safe value for `k` would be 32 bytes which is what the Sphinx paper suggests.
+/// a safe value for `k` would be 16-bytes which is what the Sphinx paper suggests.
 /// However, this prepending is not part of the code here.
 #[derive(Clone, ZeroizeOnDrop)]
 pub struct Lioness {

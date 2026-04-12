@@ -1,7 +1,7 @@
 use anyhow::Result;
 use lioness_blockcipher::{Lioness, MasterKey};
 
-const K: usize = 32;
+const K: usize = 16;
 
 fn main() -> Result<()> {
     let key: MasterKey = [0x42; 32];

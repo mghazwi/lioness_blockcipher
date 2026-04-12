@@ -10,7 +10,7 @@ This code has not been formally audited, Use at your own risk or ask a cryptogra
 [Lioness](https://www.cl.cam.ac.uk/~rja14/Papers/bear-lion.pdf) is a large block cipher built from 
 - Stream cipher, 
 - Hash function,
-- Key derivation function (KDF), although this can be remove if the input key is large enough to cover the four sub-keys used.
+- Key derivation function (KDF), although this can be removed if the input key is large enough to cover the four sub-keys used.
 
 In here we use:
 - Chacha20 from [rustcrypto streamciphers](https://github.com/RustCrypto/stream-ciphers)
@@ -52,12 +52,12 @@ Some notes:
 
 - Encryption and decryption are both in-place for now.
 - The block length need to be bigger than `32` bytes because Lioness splits the block into two where the left part is 32-byte, and the right part can't be empty. might support small blocks in the future, but for Sphinx use-case, this should work.
-- If you need authenticity, make sure to prepend the plaintext with `k` zeros and check the zeros after decryption. This will be supported in the future... see [integrity example](./examples/integrity.rs)
+- If you need authenticity, make sure to prepend the plaintext with `k = 128-bits` zeros and check the zeros after decryption. This will be supported in the future... see [integrity example](./examples/integrity.rs)
 
 ### TODO
 - [ ] Add more tests, examples, and benchmarks ...
 - [ ] Make it generic for any compatible cipher, keyed_hash, and KDF. 
-- [ ] Compare with another implementation ... maybe with Haskel when available.
+- [ ] Compare with existing implementation + maybe with Haskel when available.
 - [ ] Add a version with API which prepend the plaintext with k-zeros and checks authenticity after decryption.
 - [ ] impl enc and dec to the API to work beside encrypt_in_place and decrypt_in_place.
 - ...
