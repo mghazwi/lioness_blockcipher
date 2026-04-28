@@ -9,5 +9,5 @@ license = "MIT OR Apache-2.0"
 anyhow = "1"
 blake2 = "0.10"
 chacha20 = "0.10"
-sha3 = "0.11.0"
+turboshake = "0.6.0"
 zeroize = { version = "1", features = ["zeroize_derive"] }

@@ -3,10 +3,8 @@ use blake2::Blake2bMac;
 use blake2::digest::{KeyInit as BlakeKeyInit, Mac, consts::U32};
 use chacha20::ChaCha20;
 use chacha20::cipher::{KeyIvInit, StreamCipher};
-use sha3::{
-    Shake128,
-    digest::{ExtendableOutput, Update, XofReader},
-};
+use turboshake::TurboShake128;
+use turboshake::digest::{Update, ExtendableOutput, XofReader};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 // We expect the input key to be of size 32 bytes (256-bits)
@@ -125,7 +123,7 @@ impl Lioness {
 /// derive all 4 keys from the master key using the KDF i.e. turboshake in here.
 fn derive_round_keys(master_key: &MasterKey) -> RoundKeys {
     // WARNING: this uses the default domain separation 0x1f
-    let mut kdf = Shake128::default();
+    let mut kdf = <TurboShake128>::default();
     kdf.update(master_key);
 
     let mut reader = kdf.finalize_xof();
