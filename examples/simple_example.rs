@@ -1,12 +1,19 @@
-use lioness_blockcipher::{Lioness, MasterKey};
+use rand_core::{OsRng, RngCore};
+use lioness_blockcipher::prelude::*;
+type TestLioness = Lioness::<
+    ChaCha20StreamCipher,
+    KeyedBlake2b,
+    TurboShake128Kdf
+>;
 
 fn main() -> anyhow::Result<()> {
-    let key: MasterKey = [0x42; 32];
+    let mut key: Key256 = Default::default();
+    OsRng.fill_bytes(&mut key);
 
-    let cipher = Lioness::new(&key);
+    let cipher: TestLioness = Lioness::new(&key)?;
 
-    // Blocks must be at >32 bytes long
-    let mut block = b"this is a long plaintext block and must stay a secret".to_vec();
+    // Blocks must be at >64 bytes long
+    let mut block = vec![0x84u8; 65];
     let original = block.clone();
 
     cipher.encrypt_in_place(&mut block)?;
