@@ -1,5 +1,5 @@
 
-### Lioness large-block cipher with ChaCha20, Blake2b, and Turboshake.
+### Lioness wide-block cipher.
 
 ### Warning
 
@@ -7,7 +7,7 @@ This code has not been formally audited, Use at your own risk or ask a cryptogra
 
 ### Overview
 
-[Lioness](https://www.cl.cam.ac.uk/~rja14/Papers/bear-lion.pdf) is a large block cipher built from 
+[Lioness](https://www.cl.cam.ac.uk/~rja14/Papers/bear-lion.pdf) is a wide block cipher built from 
 - `S`: Stream cipher, 
 - `H`: Keyed-Hash function,
 - `K`: Key derivation function (KDF) to derive the 4 internal round keys
