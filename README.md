@@ -63,8 +63,8 @@ fn main() -> anyhow::Result<()> {
 Some notes:
 
 - Encryption and decryption are both in-place for now.
-- The block length need to be bigger than `64` bytes because Lioness splits the block into two where the left part is 32-byte, and the right part needs at least 16 bytes. might support small blocks in the future, but for Sphinx use-case, this should work.
-- If you need authenticity, make sure to use `encrypt_in_place_auth` which prepends the plaintext with 128-bits zeros. Also use `decrypt_in_place_auth` to check the zeros after decryption. see [authentication example](./examples/auth)
+- The block length need to be at least `64` bytes because Lioness splits the block into two where the left part is 32-byte, and the right part needs at least 16 bytes. might support small blocks in the future, but for Sphinx use-case, this should work.
+- If you need authenticity, make sure to use `encrypt_auth` which prepends the plaintext with 128-bits zeros. Also use `decrypt_auth` to check the zeros after decryption. see [authentication example](./examples/auth)
 
 ### TODO
 - [x] Add more tests, examples, and benchmarks ...

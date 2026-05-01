@@ -9,7 +9,7 @@ type TestLioness = Lioness::<
     TurboShake128Kdf
 >;
 
-fn main() -> Result<()> {
+fn prepend_before_enc() -> Result<()>{
     let mut key: Key256 = Default::default();
     OsRng.fill_bytes(&mut key);
     let cipher: TestLioness = Lioness::new(&key)?;
@@ -26,9 +26,37 @@ fn main() -> Result<()> {
 
     cipher.decrypt_in_place(&mut block)?;
 
-    if block[..SEC_PARAM].iter().all(|&b| b != 0) {
-        println!("tampering detected i.e. zero-prefix check failed");
+    for b in block[..SEC_PARAM].iter(){
+        if *b != 0{
+            println!("tampering detected i.e. zero-prefix check failed");
+            break
+        }
     }
 
     Ok(())
+}
+
+fn call_enc_auth() -> Result<()>{
+    let mut key: Key256 = Default::default();
+    OsRng.fill_bytes(&mut key);
+    let cipher: TestLioness = Lioness::new(&key)?;
+
+    let mut payload = [0x84u8; 4096];
+
+    // let mut block = plaintext.clone();
+    let mut ciphertext = cipher.encrypt_auth(&mut payload)?;
+
+    // tamper with the ciphertext
+    ciphertext[21] ^= 0x01;
+
+    assert!(cipher.decrypt_auth(&mut ciphertext).is_err());
+
+    Ok(())
+}
+
+fn main() -> Result<()> {
+    // prepend before calling the lioness encryption
+    prepend_before_enc()?;
+    // use built-in functions
+    call_enc_auth()
 }

@@ -121,10 +121,17 @@ impl<
     }
 
     /// Same as `encrypt_in_place` but prepends the plaintext with `SEC_PARAM` bytes of zeros
-    pub fn encrypt_in_place_auth(&self, _block: &mut [u8]) -> Result<()> {
-        let mut plaintext = vec![0u8; SEC_PARAM];
-        plaintext.extend_from_slice(_block);
-        todo!()
+    /// WARNING: The output ciphertext is 16 bytes bigger than the input block
+    /// Here we can accept 48 bytes since we add 16-bytes zero prefix.
+    pub fn encrypt_auth(&self, plaintext: &mut [u8]) -> Result<Vec<u8>> {
+        // Here we can accept at least 48 bytes since we add 16-bytes zero prefix.
+        if plaintext.len() < 2*K_256 - SEC_PARAM {
+            return Err(anyhow!("block must be at least {} bytes", 2*K_256 - SEC_PARAM));
+        }
+        let mut block = vec![0u8; SEC_PARAM + plaintext.len()];
+        block[SEC_PARAM..].copy_from_slice(plaintext);
+        self.encrypt_in_place(&mut block)?;
+        Ok(block)
     }
 
     /// Decrypt a single wide block in place.
@@ -150,8 +157,19 @@ impl<
     }
 
     /// Same as `decrypt_in_place` with added check for `SEC_PARAM`-bytes zero prefix
-    pub fn decrypt_in_place_auth(&self, _block: &mut [u8]) -> Result<()> {
-        todo!()
+    /// returns either the plaintext without the zero prefix or throws an error
+    pub fn decrypt_auth(&self, block: &mut [u8]) -> Result<Vec<u8>> {
+        if block.len() < 2*K_256 {
+            return Err(anyhow!("blocks must be at least {} bytes", 2*K_256));
+        }
+        self.decrypt_in_place(block)?;
+        for b in block[..SEC_PARAM].iter(){
+            if *b != 0{
+                return Err(anyhow!("ciphertext tampering detected!"))
+            }
+        }
+
+        Ok(block.to_vec().split_off(SEC_PARAM))
     }
 
     /// apply the steam cipher round

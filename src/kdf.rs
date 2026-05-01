@@ -60,10 +60,10 @@ impl LionessKdf for HkdfSha256{
 
 pub struct DomSepSha256Kdf;
 const LIONESS_ROUND_KEY_DOMAINS: [&[u8]; 4] = [
-    b"Lioness-key1",
-    b"Lioness-key2",
-    b"Lioness-key3",
-    b"Lionesskey4",
+    b"lioness-key1",
+    b"lioness-key2",
+    b"lioness-key3",
+    b"lionesskey4",
 ];
 impl LionessKdf for DomSepSha256Kdf {
     fn derive_keys(master_key: &Key256) -> anyhow::Result<RoundKeys> {
