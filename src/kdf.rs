@@ -63,7 +63,7 @@ const LIONESS_ROUND_KEY_DOMAINS: [&[u8]; 4] = [
     b"lioness-key1",
     b"lioness-key2",
     b"lioness-key3",
-    b"lionesskey4",
+    b"lioness-key4",
 ];
 impl LionessKdf for DomSepSha256Kdf {
     fn derive_keys(master_key: &Key256) -> anyhow::Result<RoundKeys> {

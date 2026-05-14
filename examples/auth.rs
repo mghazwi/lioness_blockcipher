@@ -1,12 +1,15 @@
 use anyhow::Result;
 use rand_core::{OsRng, RngCore};
+use lioness_blockcipher::cipher::Aes128CtrStreamCipher;
+use lioness_blockcipher::kdf::DomSepSha256Kdf;
+use lioness_blockcipher::keyed_hash::Sha256PrependKey;
 use lioness_blockcipher::lioness::SEC_PARAM;
 use lioness_blockcipher::prelude::*;
 
 type TestLioness = Lioness::<
-    ChaCha20StreamCipher,
-    KeyedBlake2b,
-    TurboShake128Kdf
+    Aes128CtrStreamCipher,
+    Sha256PrependKey,
+    DomSepSha256Kdf,
 >;
 
 fn prepend_before_enc() -> Result<()>{
