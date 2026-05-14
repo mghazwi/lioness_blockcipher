@@ -34,9 +34,9 @@ Use a 32-byte master key and encrypt or decrypt a block in place:
 use rand_core::{OsRng, RngCore};
 use lioness_blockcipher::prelude::*;
 type TestLioness = Lioness::<
-    ChaCha20StreamCipher,
-    KeyedBlake2b,
-    TurboShake128Kdf
+    Aes128CtrStreamCipher,
+    Sha256PrependKey,
+    DomSepSha256Kdf,
 >;
 
 fn main() -> anyhow::Result<()> {
@@ -69,7 +69,5 @@ Some notes:
 ### TODO
 - [x] Add more tests, examples, and benchmarks ...
 - [x] Make it generic for any compatible cipher, keyed_hash, and KDF. 
-- [ ] Compare with existing implementation + maybe with Haskel when available.
-- [x] Add function which prepend the plaintext with k-zeros and checks authenticity after decryption.
-- [ ] impl enc and dec to the API to work beside encrypt_in_place and decrypt_in_place.
-- ...
+- [x] Compare with existing Haskel implementation.
+- [x] Add authenticated encryption and decryption which prepend the plaintext with k-zeros and checks authenticity after decryption.

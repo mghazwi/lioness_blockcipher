@@ -3,13 +3,13 @@ mod tests {
     use rand_core::{OsRng, RngCore};
     use lioness_blockcipher::cipher::Aes128CtrStreamCipher;
     use lioness_blockcipher::kdf::DomSepSha256Kdf;
-    use lioness_blockcipher::keyed_hash::HmacSha256KeyedHash;
+    use lioness_blockcipher::keyed_hash::Sha256PrependKey;
     use lioness_blockcipher::prelude::*;
     type TestLioness = Lioness::<
         Aes128CtrStreamCipher,
-        HmacSha256KeyedHash,
-        DomSepSha256Kdf
-        >;
+        Sha256PrependKey,
+        DomSepSha256Kdf,
+    >;
     fn get_test_key() -> Key256 {
         let mut key: Key256 = Default::default();
         OsRng.fill_bytes(&mut key);
