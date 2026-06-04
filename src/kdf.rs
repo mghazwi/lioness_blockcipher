@@ -73,7 +73,6 @@ impl LionessKdf for DomSepSha256Kdf {
             Digest::update(&mut hash, LIONESS_KDF_DOMAIN);
             Digest::update(& mut hash, LIONESS_ROUND_KEY_DOMAINS[i]);
             Digest::update(& mut hash, master_key);
-            Digest::update(& mut hash, master_key);
             let output = hash.finalize();
             key.copy_from_slice(&output);
 
